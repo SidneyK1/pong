@@ -33,7 +33,7 @@ function create_paddle(x,y) {
   paddle.anchor.setTo(0.5, 0.5);
   game.physics.arcade.enable(paddle);
   paddle.body.collideWorldBounds = true;
-  paddle.body.immoveable = true;
+  paddle.body.immovable = true;
   paddle.scale.setTo(0.5, 0.5);
 
 
@@ -47,7 +47,7 @@ function create_ball(x, y) {
   ball.body.collideWorldBounds = true;
   ball.body.bounce.setTo(1, 1);
 
-  return ball;
+    return ball;
 }
 
 function launch_ball() {
