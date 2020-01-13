@@ -67,19 +67,19 @@ function create() {
   ball_launched = false;
   ball_velocity = 400;
 
-  paddle1 = create_paddle(0, game.world.CenterY);
-  paddle2 = create_paddle(game.world.width - 8, game.world.CenterY);
+  paddle1 = create_paddle(game.world.centerX, 0);
+  paddle2 = create_paddle(game.world.centerX, game.world.height);
   ball = create_ball(game.world.centerX, game.world.centerY);
 
   game.input.onDown.add(launch_ball, this);
 
-  score1_text = game.add.text(128, 128, '0', {
+  score1_text = game.add.text(128, 210, '0', {
       font: "64px Gabriella",
       fill: "#ffffff",
       algin: "center"
   }); 
 
-  score2_text = game.add.text(game.world.width - 128, 128, '0', {
+  score2_text = game.add.text(128, game.world.height - 290, '0', {
       font: "64px Gabriella",
       fill: "#ffffff",
       algin: "center"
@@ -91,30 +91,33 @@ function create() {
 
 }
 
-function control_paddle(paddle, y) {
-  paddle.y = y;
+function control_paddle(paddle, x) {
+  paddle.x = x;
 
-  if (paddle.y < paddle.height / 2) {
-      paddle.y = paddle.height / 2;
-  } else if (paddle.y > game.world.height - paddle.height / 2) {
-      paddle.y = game.world.height - paddle.height / 2;
+  if (paddle.x < paddle.width / 2) {
+      paddle.x = paddle.width / 2;
+  } else if (paddle.x > game.world.width - paddle.width / 2) {
+      paddle.x = game.world.width - paddle.width / 2;
   }
 }
 
 function update() {
-  control_paddle(paddle1, game.input.y);
-  game.physics.arcade.collide(paddle1,ball);
-  game.physics.arcade.collide(paddle2,ball);
+  if (ball_launched) {
+    control_paddle(paddle1, game.input.x);
+  }
+  
+  game.physics.arcade.collide(paddle1, ball);
+  game.physics.arcade.collide(paddle2, ball);
 
-  if (ball.body.blocked.left) {
+  if (ball.body.blocked.up) {
       score2 += 1;
-  } else if (ball.body.blocked.right) {
+  } else if (ball.body.blocked.down) {
       score1 += 1;
   }
 
-  paddle2.body.velocity.setTo(ball.body.velocity.y);
-  paddle2.body.velocity.x = 0;
-  paddle2.body.maxVelocity.y = 250; 
+  paddle2.body.velocity.setTo(ball.body.velocity.x);
+  paddle2.body.velocity.y = 0;
+  paddle2.body.maxVelocity.x = 250; 
 
   score1_text.text = score1;
   score2_text.text = score2;
