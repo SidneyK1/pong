@@ -1,0 +1,15 @@
+{
+  "name": "pong",
+  "version": "0.0.0",
+  "scripts": {
+    "start": "webpack --mode development && webpack-dev-server",
+    "clean": "rm -rf dist node_modules package-lock.json"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "html-webpack-plugin": "^3.2.0",
+    "webpack": "^4.40.2",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.8.1"
+  }
+}
