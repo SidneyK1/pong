@@ -1,126 +1,115 @@
-var game = new Phaser.Game(
+class PongGame {
+
+  preload() {
+    this.game.load.image('paddle', './assets/paddle.png')
+    this.game.load.image('ball', './assets/ball.png')
+  }
+
+  createPlayer(x,y) {
+    const player = this.game.add.sprite(x, y, 'paddle');
+    player.anchor.setTo(0.5, 0.5);
+    this.game.physics.arcade.enable(player);
+    player.body.collideWorldBounds = true;
+    player.body.immovable = true;
+    player.scale.setTo(0.4, 0.4);
+
+    return player;
+  }
+
+  createBall(x, y) {
+    const ball = this.game.add.sprite(x, y, 'ball');
+    ball.anchor.setTo(0.5, 0.5);
+    this.game.physics.arcade.enable(ball);
+    ball.body.collideWorldBounds = true;
+    ball.body.bounce.setTo(1, 1);
+  
+    return ball;
+  }
+
+  
+  launchBall() {
+    if (this.ballLaunched) {
+        this.ball.x = game.world.centerX;
+        this.ball.y = game.world.centerY;
+        this.ball.body.velocity.setTo(0, 0);
+        this.ball_launched = false; 
+    } else {
+        this.ball.body.velocity.x = -this.ballVelocity;
+        this.ball.body.velocity.y = this.ballVelocity;
+        this.ballLaunched = true;
+    }
+  }
+  
+  
+  create() {
+    this.ballLaunched = false;
+    this.ballVelocity = 400;
+  
+    this.player1 = this.createPlayer(this.game.world.centerX, 0);
+    this.player2 = this.createPlayer(this.game.world.centerX, this.game.world.height);
+    this.ball = this.createBall(this.game.world.centerX, this.game.world.centerY);
+  
+    this.game.input.onDown.add(this.launchBall, this);
+  
+    this.player1ScoreText = this.game.add.text(90, 270, '0', {
+        font: "64px Gabriella",
+        fill: "#ffffff",
+        algin: "center"
+    }); 
+  
+    this.player2ScoreText = this.game.add.text(90, this.game.world.height - 340, '0', {
+        font: "64px Gabriella",
+        fill: "#ffffff",
+        algin: "center"
+    });
+  
+    this.scorePlayer1 = 0;
+    this.scorePlayer2 = 0;
+  }
+
+  
+  movePlayer(player, x) {
+    player.x = x;
+  
+    if (player.x < player.width / 2) {
+        player.x = player.width / 2;
+    } else if (player.x > game.world.width - player.width / 2) {
+        player.x = game.world.width - player.width / 2;
+    }
+  }
+  
+  update() {
+    if (this.ballLaunched) {
+      this.movePlayer(this.player1, this.game.input.x);
+    }
+    
+    this.game.physics.arcade.collide(this.player1, this.ball);
+    this.game.physics.arcade.collide(this.player2, this.ball);
+  
+    if (this.ball.body.blocked.up) {
+      this.scorePlayer2 += 1;
+    } else if (this.ball.body.blocked.down) {
+      this.scorePlayer1 += 1;
+    }
+  
+    // enemy AI
+    this.player2.body.velocity.setTo(this.ball.body.velocity.x);
+    this.player2.body.velocity.y = 0;
+    this.player2.body.maxVelocity.x = 250;
+     
+  
+    this.player1ScoreText.text = this.scorePlayer1;
+    this.player2ScoreText.text = this.scorePlayer2;
+  }
+
+}
+
+const game = new Phaser.Game(
   500,
   700,
   Phaser.AUTO,
-  '',
-  {
-      preload: preload, 
-      create: create,
-      update: update
-  }
+  ''
 );
-var paddle1;
-var paddle2;
 
-var ball_launched;
-var ball_velocity;
-var ball;
-
-var score1_text;
-var score2_text;
-
-var score1;
-var score2;
-
-
-function preload() {
-  game.load.image('paddle', './assets/paddle.png')
-  game.load.image('ball', './assets/ball.png')
-}
-
-function create_paddle(x,y) {
-  var paddle = game.add.sprite(x, y, 'paddle');
-  paddle.anchor.setTo(0.5, 0.5);
-  game.physics.arcade.enable(paddle);
-  paddle.body.collideWorldBounds = true;
-  paddle.body.immovable = true;
-  paddle.scale.setTo(0.4, 0.4);
-
-
-  return paddle;
-}
-
-function create_ball(x, y) {
-  var ball = game.add.sprite(x, y, 'ball');
-  ball.anchor.setTo(0.5, 0.5);
-  game.physics.arcade.enable(ball);
-  ball.body.collideWorldBounds = true;
-  ball.body.bounce.setTo(1, 1);
-
-    return ball;
-}
-
-function launch_ball() {
-  if (ball_launched) {
-      ball.x = game.world.centerX;
-      ball.y = game.world.centerY;
-      ball.body.velocity.setTo(0, 0);
-      ball_launched = false; 
-  } else {
-      ball.body.velocity.x = -ball_velocity;
-      ball.body.velocity.y = ball_velocity;
-      ball_launched = true;
-  }
-}
-
-function create() {
-  ball_launched = false;
-  ball_velocity = 400;
-
-  paddle1 = create_paddle(game.world.centerX, 0);
-  paddle2 = create_paddle(game.world.centerX, game.world.height);
-  ball = create_ball(game.world.centerX, game.world.centerY);
-
-  game.input.onDown.add(launch_ball, this);
-
-  score1_text = game.add.text(90, 270, '0', {
-      font: "64px Gabriella",
-      fill: "#ffffff",
-      algin: "center"
-  }); 
-
-  score2_text = game.add.text(90, game.world.height - 340, '0', {
-      font: "64px Gabriella",
-      fill: "#ffffff",
-      algin: "center"
-  });
-
-  score1 = 0;
-  score2 = 0;
-
-
-}
-
-function control_paddle(paddle, x) {
-  paddle.x = x;
-
-  if (paddle.x < paddle.width / 2) {
-      paddle.x = paddle.width / 2;
-  } else if (paddle.x > game.world.width - paddle.width / 2) {
-      paddle.x = game.world.width - paddle.width / 2;
-  }
-}
-
-function update() {
-  if (ball_launched) {
-    control_paddle(paddle1, game.input.x);
-  }
-  
-  game.physics.arcade.collide(paddle1, ball);
-  game.physics.arcade.collide(paddle2, ball);
-
-  if (ball.body.blocked.up) {
-      score2 += 1;
-  } else if (ball.body.blocked.down) {
-      score1 += 1;
-  }
-
-  // enemy AI
-  paddle2.body.velocity.setTo(ball.body.velocity.x);
-  paddle2.body.velocity.y = 0;
-  paddle2.body.maxVelocity.x = 250;
-   
-
-  score1_text.text = score1;
-  score2_text.text = score2;
-}
+game.state.add('Pong', PongGame);
+game.state.start('Pong');
