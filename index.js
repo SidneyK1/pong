@@ -1,6 +1,6 @@
 var game = new Phaser.Game(
-  800,
-  600,
+  500,
+  700,
   Phaser.AUTO,
   '',
   {
@@ -34,7 +34,7 @@ function create_paddle(x,y) {
   game.physics.arcade.enable(paddle);
   paddle.body.collideWorldBounds = true;
   paddle.body.immovable = true;
-  paddle.scale.setTo(0.5, 0.5);
+  paddle.scale.setTo(0.4, 0.4);
 
 
   return paddle;
@@ -73,13 +73,13 @@ function create() {
 
   game.input.onDown.add(launch_ball, this);
 
-  score1_text = game.add.text(128, 210, '0', {
+  score1_text = game.add.text(90, 270, '0', {
       font: "64px Gabriella",
       fill: "#ffffff",
       algin: "center"
   }); 
 
-  score2_text = game.add.text(128, game.world.height - 290, '0', {
+  score2_text = game.add.text(90, game.world.height - 340, '0', {
       font: "64px Gabriella",
       fill: "#ffffff",
       algin: "center"
@@ -115,9 +115,11 @@ function update() {
       score1 += 1;
   }
 
+  // enemy AI
   paddle2.body.velocity.setTo(ball.body.velocity.x);
   paddle2.body.velocity.y = 0;
-  paddle2.body.maxVelocity.x = 250; 
+  paddle2.body.maxVelocity.x = 250;
+   
 
   score1_text.text = score1;
   score2_text.text = score2;
