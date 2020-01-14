@@ -23,7 +23,7 @@ export default class PongGame {
         this.game.physics.arcade.enable(ball);
         ball.body.collideWorldBounds = true;
         ball.body.bounce.setTo(1, 1);
-        ball.scale.setTo(0.25, 0.25);
+        ball.scale.setTo(0.20, 0.20);
 
         return ball;
     }
