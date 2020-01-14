@@ -2,8 +2,7 @@ export default class PongGame {
 
     preload() {
         this.game.load.image('paddle', './assets/paddle.png')
-        this.game.load.image('ball', './assets/ball.png')
-        this.game.load.image('ball2', './assets/ball2.png')
+        this.game.load.image('tennisball', './assets/tennisball.png')
     }
 
     createPlayer(x,y) {
@@ -18,7 +17,7 @@ export default class PongGame {
     }
 
     createBall(x, y) {
-        const ball = this.game.add.sprite(x, y, 'ball2');
+        const ball = this.game.add.sprite(x, y, 'tennisball');
         ball.anchor.setTo(0.5, 0.5);
         this.game.physics.arcade.enable(ball);
         ball.body.collideWorldBounds = true;
@@ -83,16 +82,16 @@ export default class PongGame {
 
     update() {
         if (this.ballLaunched) {
-        this.movePlayer(this.player1, this.game.input.x);
+            this.movePlayer(this.player1, this.game.input.x);
         }
         
         this.game.physics.arcade.collide(this.player1, this.ball);
         this.game.physics.arcade.collide(this.player2, this.ball);
 
         if (this.ball.body.blocked.up) {
-        this.scorePlayer2 += 1;
+            this.scorePlayer2 += 1;
         } else if (this.ball.body.blocked.down) {
-        this.scorePlayer1 += 1;
+            this.scorePlayer1 += 1;
         }
 
         // enemy AI
