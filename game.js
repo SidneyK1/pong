@@ -44,6 +44,7 @@ export default class PongGame {
 
 
     create() {
+        this.multiplayer = localStorage.getItem('pongMultiplayer');
         this.ballLaunched = false;
         this.ballVelocity = 400;
 

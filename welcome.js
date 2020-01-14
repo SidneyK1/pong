@@ -44,11 +44,12 @@ export default class Welcome {
     update() {}
   
     startSinglePlayer() {
+        localStorage.setItem('pongMultiplayer', false);
         this.state.start('game');
     }
 
     startMultiPlayer() {
-        // TODO: multiplayer stuff
+        localStorage.setItem('pongMultiplayer', true);
         this.state.start('game')
     }
   }
