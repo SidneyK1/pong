@@ -7,8 +7,9 @@ export default class Welcome {
      * https://photonstorm.github.io/phaser-ce/Phaser.Game.html#load
      */
     preload() {
-        this.load.spritesheet('singlePlayerButton', './assets/button_einzelspieler.png', 200, 73);
-        this.load.spritesheet('multiPlayerButton', './assets/button_mehrspieler.png', 200, 73 )
+        this.game.load.image('Court', './assets/background2.jpg')
+        this.load.spritesheet('singlePlayerButton', './assets/button_einzelspieler.png', 166, 40);
+        this.load.spritesheet('multiPlayerButton', './assets/button_mehrspieler.png', 162, 40);
     }
   
     /**
@@ -16,6 +17,7 @@ export default class Welcome {
      * https://photonstorm.github.io/phaser-ce/Phaser.State.html#create
      */
     create() {
+        this.add.image(0, 0, 'Court')
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         this.scale.maxWidth = this.game.width;
         this.scale.maxHeight = this.game.height;
@@ -44,12 +46,12 @@ export default class Welcome {
     update() {}
   
     startSinglePlayer() {
-        localStorage.setItem('pongMultiplayer', false);
+        localStorage.setItem('pongMultiplayer', 0);
         this.state.start('game');
     }
 
     startMultiPlayer() {
-        localStorage.setItem('pongMultiplayer', true);
+        localStorage.setItem('pongMultiplayer', 0);
         this.state.start('game')
     }
   }

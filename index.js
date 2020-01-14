@@ -2,8 +2,9 @@ import PongGame from './game.js'
 import Welcome from './welcome.js'
 import GameOver from './gameOver.js'
 
-const game = new Phaser.Game(500,
-  700,
+const game = new Phaser.Game(
+  500,
+  830,
   Phaser.AUTO,
   'pong'
 );

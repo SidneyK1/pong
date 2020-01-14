@@ -3,6 +3,7 @@ export default class PongGame {
     preload() {
         this.game.load.image('paddle', './assets/paddle.png')
         this.game.load.image('tennisball', './assets/tennisball.png')
+        this.game.load.image('Court', './assets/background2.jpg')
     }
 
     createPlayer(x,y) {
@@ -43,7 +44,9 @@ export default class PongGame {
 
 
     create() {
-        this.multiplayer = localStorage.getItem('pongMultiplayer');
+        this.add.image(0, 0, 'Court')
+        this.multiplayer = parseInt(localStorage.getItem('pongMultiplayer'));
+        console.log('just read multiplayer', this.multiplayer);
         this.ballLaunched = false;
         this.ballVelocity = 400;
 
@@ -52,6 +55,16 @@ export default class PongGame {
         this.ball = this.createBall(this.game.world.centerX, this.game.world.centerY);
 
         this.game.input.onDown.add(this.launchBall, this);
+
+        this.player1Controls = {
+            left: this.game.input.keyboard.addKey(Phaser.Keyboard.A),
+            right: this.game.input.keyboard.addKey(Phaser.Keyboard.S)
+        };
+
+        this.player2Controls = {
+            left: this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT),
+            right: this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT)
+        };
 
         this.player1ScoreText = this.game.add.text(90, 270, '0', {
             font: "64px Gabriella",
@@ -70,19 +83,23 @@ export default class PongGame {
     }
 
 
-    movePlayer(player, x) {
-        player.x = x;
-
-        if (player.x < player.width / 2) {
-            player.x = player.width / 2;
-        } else if (player.x > this.game.world.width - player.width / 2) {
-            player.x = this.game.world.width - player.width / 2;
+    movePlayer(player) {
+        const controls = player === this.player1 ? this.player1Controls : this.player2Controls;
+        if (controls.left.isDown) {
+            player.body.velocity.x = -400;
+        } else if (controls.right.isDown) {
+            player.body.velocity.x = 400;
+        } else {
+            player.body.velocity.x = 0;
         }
     }
 
     update() {
         if (this.ballLaunched) {
-            this.movePlayer(this.player1, this.game.input.x);
+            this.movePlayer(this.player1);
+            if (this.multiplayer) {
+                this.movePlayer(this.player2);
+            }
         }
         
         this.game.physics.arcade.collide(this.player1, this.ball);
@@ -93,15 +110,28 @@ export default class PongGame {
         } else if (this.ball.body.blocked.down) {
             this.scorePlayer1 += 1;
         }
+        this.checkGameOver();
 
         // enemy AI
-        this.player2.body.velocity.setTo(this.ball.body.velocity.x);
-        this.player2.body.velocity.y = 0;
-        this.player2.body.maxVelocity.x = 250;
-        
+        if (!this.multiplayer) {
+            this.player2.body.velocity.setTo(this.ball.body.velocity.x);
+            this.player2.body.velocity.y = 0;
+            this.player2.body.maxVelocity.x = 250;
+        }
 
         this.player1ScoreText.text = this.scorePlayer1;
         this.player2ScoreText.text = this.scorePlayer2;
+    }
+
+    checkGameOver() {
+        if (this.scorePlayer1 === 1) {
+            localStorage.setItem('winner', 'Player 1');
+            this.game.state.start('gameover');
+        }
+        if (this.scorePlayer2 === 1) {
+            localStorage.setItem('winner', 'Player 2');
+            this.game.state.start('gameover');
+        }
     }
 
 }
