@@ -1,21 +1,12 @@
 export default class Welcome {
 
-    /**
-     * Diese Funktion wird ausgeführt, bevor das Spiel geladen wird, um 
-     * Bilder zwischenzuspeichern, die das Spiel verwendet.
-     * https://photonstorm.github.io/phaser-ce/Phaser.State.html#preload
-     * https://photonstorm.github.io/phaser-ce/Phaser.Game.html#load
-     */
     preload() {
         this.game.load.image('Court', './assets/background2.jpg')
         this.load.spritesheet('singlePlayerButton', './assets/button_einzelspieler.png', 166, 40);
         this.load.spritesheet('multiPlayerButton', './assets/button_mehrspieler.png', 162, 40);
+        this.load.spritesheet('control', './assets/button_steuerung.png', 142, 40);
     }
   
-    /**
-     * Diese Funktion wird beim Anlegen des Spiels als erstes ausgeführt.
-     * https://photonstorm.github.io/phaser-ce/Phaser.State.html#create
-     */
     create() {
         this.add.image(0, 0, 'Court')
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -24,22 +15,16 @@ export default class Welcome {
         this.scale.pageAlignHorizontally = true;
         this.scale.pageAlignVertically = true;
 
-        this.add.button(this.world.centerX - 100, 180, 'singlePlayerButton', this.startSinglePlayer, this, 2, 1, 0);
-        this.add.button(this.world.centerX - 100, 300, 'multiPlayerButton', this.startMultiPlayer,this, 2, 1, 0);
+        this.add.button(this.world.centerX - 90, 480, 'singlePlayerButton', this.startSinglePlayer, this, 2, 1, 0);
+        this.add.button(this.world.centerX - 88, 550, 'multiPlayerButton', this.startMultiPlayer,this, 2, 1, 0);
+        this.add.button(this.game.world.centerX - 77, this.game.world.centerY + 240, 'control', this.showControls, this, 2, 1, 0);
 
-        this.game.add.text(this.game.centerX, this.game.world.height - 100, 'Welcome to', {
-            font: "32px Gabriella",
-            fill: "#ffffff",
+        this.game.add.text(this.world.centerX - 220, this.game.world.height - 670, 'Willkommen zu\n       PONG', {
+            font: "64px Arial",
+            fill: "#EC0909",
             algin: "center"
         });
     }
-  
-    /**
-     * Hauptfunktion des Spiels, dass automatisch von der Phaser-Engine
-     * in einer Endlosschleife immer wieder aufgerufen wird.
-     * https://photonstorm.github.io/phaser-ce/Phaser.State.html#update
-     * 
-     */
     update() {}
   
     startSinglePlayer() {
@@ -51,4 +36,9 @@ export default class Welcome {
         localStorage.setItem('pongMultiplayer', 1);
         this.state.start('game')
     }
+
+    showControls() {
+        this.state.start('controls')
+    }
+
   }

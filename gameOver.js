@@ -8,12 +8,12 @@ export default class GameOver {
 
     create() {
         this.add.image(0, 0, 'Court')
-        this.add.button(this.world.centerX - 75, 500, 'returnToHome', this.returnToHome,this, 2, 1, 0);
-        this.add.button(this.world.centerX - 75 , 400, 'playAgain', this.playsameAgain,this, 2, 1, 0);
+        this.add.button(this.world.centerX - 80, 550, 'returnToHome', this.returnToHome,this, 2, 1, 0);
+        this.add.button(this.world.centerX - 80, 460, 'playAgain', this.playsameAgain,this, 2, 1, 0);
         const winner = localStorage.getItem('winner');
-        this.game.add.text(this.world.centerX - 100, this.game.world.height - 500, `${winner} has won`, {
-            font: "32px Gabriella",
-            fill: "#ffffff",
+        this.game.add.text(31, 150, `     ${winner} \n hat gewonnen`, {
+            font: "64px Arial",
+            fill: "#EC0909",
             algin: "center"
         });
     }

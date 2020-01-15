@@ -67,17 +67,20 @@ export default class PongGame {
             right: this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT)
         };
 
-        this.player1ScoreText = this.game.add.text(90, 270, '0', {
-            font: "64px Gabriella",
-            fill: "#ffffff",
+        this.player1ScoreText = this.game.add.text(35, 275, '0', {
+            font: "64px Arial",
+            fill: "#EC0909",
             algin: "center"
         }); 
 
-        this.player2ScoreText = this.game.add.text(90, this.game.world.height - 340, '0', {
-            font: "64px Gabriella",
-            fill: "#ffffff",
+        this.player2ScoreText = this.game.add.text(35, this.game.world.height - 390, '0', {
+            font: "64px Arial",
+            fill: "#EC0909",
             algin: "center"
         });
+        
+        this.player2ScoreText.scale.setTo(1.5, 1.5);
+        this.player1ScoreText.scale.setTo(1.5, 1.5);
 
         this.scorePlayer1 = 0;
         this.scorePlayer2 = 0;
@@ -95,9 +98,9 @@ export default class PongGame {
     movePlayerByTouch() {
         const touchedPlayer = !this.multiplayer || this.game.input.y < this.game.world.centerY ? this.player1 : this.player2;
         if (this.game.input.x < this.game.world.centerX) {
-            touchedPlayer.body.velocity.x = -400;
+            touchedPlayer.body.velocity.x = -500;
         } else {
-            touchedPlayer.body.velocity.x = 400;
+            touchedPlayer.body.velocity.x = 500;
         }
     }
 
@@ -146,12 +149,12 @@ export default class PongGame {
     }
 
     checkGameOver() {
-        if (this.scorePlayer1 === 1) {
-            localStorage.setItem('winner', 'Player 1');
+        if (this.scorePlayer1 === 6) {
+            localStorage.setItem('winner', 'Spieler 1');
             this.game.state.start('gameover');
         }
-        if (this.scorePlayer2 === 1) {
-            localStorage.setItem('winner', 'Player 2');
+        if (this.scorePlayer2 === 6) {
+            localStorage.setItem('winner', 'Spieler 2');
             this.game.state.start('gameover');
         }
     }
