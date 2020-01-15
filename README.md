@@ -10,5 +10,5 @@ This project was developed during my internship at LeanIX.
 
 ## Deployment
 
-* run `npm build` to get production buld
-* run `npm run deploy` to publish dist folder on gh-pages branch
+* run `npm build` to get production build
+* run `npm deploy` to publish dist folder on gh-pages branch
