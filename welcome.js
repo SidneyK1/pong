@@ -51,7 +51,7 @@ export default class Welcome {
     }
 
     startMultiPlayer() {
-        localStorage.setItem('pongMultiplayer', 0);
+        localStorage.setItem('pongMultiplayer', 1);
         this.state.start('game')
     }
   }
