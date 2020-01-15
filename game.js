@@ -1,9 +1,10 @@
 export default class PongGame {
 
     preload() {
-        this.game.load.image('paddle', './assets/paddle.png')
-        this.game.load.image('tennisball', './assets/tennisball.png')
-        this.game.load.image('Court', './assets/background2.jpg')
+        this.game.load.image('paddle', './assets/paddle.png');
+        this.game.load.image('tennisball', './assets/tennisball.png');
+        this.game.load.image('Court', './assets/background2.jpg');
+        this.game.load.spritesheet('startButton', './assets/play-button.png');
     }
 
     createPlayer(x,y) {
@@ -39,6 +40,7 @@ export default class PongGame {
             this.ball.body.velocity.x = -this.ballVelocity;
             this.ball.body.velocity.y = this.ballVelocity;
             this.ballLaunched = true;
+            this.playButton.pendingDestroy = true;
         }
     }
 
@@ -46,7 +48,6 @@ export default class PongGame {
     create() {
         this.add.image(0, 0, 'Court')
         this.multiplayer = parseInt(localStorage.getItem('pongMultiplayer'));
-        console.log('just read multiplayer', this.multiplayer);
         this.ballLaunched = false;
         this.ballVelocity = 400;
 
@@ -54,11 +55,11 @@ export default class PongGame {
         this.player2 = this.createPlayer(this.game.world.centerX, this.game.world.height);
         this.ball = this.createBall(this.game.world.centerX, this.game.world.centerY);
 
-        this.game.input.onDown.add(this.launchBall, this);
+        this.playButton = this.add.button(this.world.centerX - 40, this.world.centerY - 40, 'startButton', this.launchBall, this, 2, 1, 0);
 
         this.player1Controls = {
             left: this.game.input.keyboard.addKey(Phaser.Keyboard.A),
-            right: this.game.input.keyboard.addKey(Phaser.Keyboard.S)
+            right: this.game.input.keyboard.addKey(Phaser.Keyboard.D)
         };
 
         this.player2Controls = {
@@ -82,8 +83,25 @@ export default class PongGame {
         this.scorePlayer2 = 0;
     }
 
+    isTouchInputActive() {
+        if (this.game.input.mousePointer.isDown) {
+            return this.game.input.mousePointer;
+        } else if (this.game.input.pointer1.isDown) {
+            return this.game.input.pointer1;
+        }
+        return false;
+    }
 
-    movePlayer(player) {
+    movePlayerByTouch() {
+        const touchedPlayer = !this.multiplayer || this.game.input.y < this.game.world.centerY ? this.player1 : this.player2;
+        if (this.game.input.x < this.game.world.centerX) {
+            touchedPlayer.body.velocity.x = -400;
+        } else {
+            touchedPlayer.body.velocity.x = 400;
+        }
+    }
+
+    movePlayerByKeyboard(player) {
         const controls = player === this.player1 ? this.player1Controls : this.player2Controls;
         if (controls.left.isDown) {
             player.body.velocity.x = -400;
@@ -96,9 +114,13 @@ export default class PongGame {
 
     update() {
         if (this.ballLaunched) {
-            this.movePlayer(this.player1);
-            if (this.multiplayer) {
-                this.movePlayer(this.player2);
+            if (this.isTouchInputActive()) {
+                this.movePlayerByTouch();
+            } else {
+                this.movePlayerByKeyboard(this.player1);
+                if (this.multiplayer) {
+                    this.movePlayerByKeyboard(this.player2);
+                }
             }
         }
         
