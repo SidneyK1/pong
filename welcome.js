@@ -9,11 +9,6 @@ export default class Welcome {
   
     create() {
         this.add.image(0, 0, 'Court')
-        this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-        this.scale.maxWidth = this.game.width;
-        this.scale.maxHeight = this.game.height;
-        this.scale.pageAlignHorizontally = true;
-        this.scale.pageAlignVertically = true;
 
         this.add.button(this.world.centerX - 90, 480, 'singlePlayerButton', this.startSinglePlayer, this, 2, 1, 0);
         this.add.button(this.world.centerX - 88, 550, 'multiPlayerButton', this.startMultiPlayer,this, 2, 1, 0);
