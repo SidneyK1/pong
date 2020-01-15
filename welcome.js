@@ -23,9 +23,6 @@ export default class Welcome {
         this.scale.maxHeight = this.game.height;
         this.scale.pageAlignHorizontally = true;
         this.scale.pageAlignVertically = true;
-        // Hintergrundfarbe 
-        // https://photonstorm.github.io/phaser-ce/Phaser.Stage.html#backgroundColor
-        this.stage.backgroundColor = '#FF620E';
 
         this.add.button(this.world.centerX - 100, 180, 'singlePlayerButton', this.startSinglePlayer, this, 2, 1, 0);
         this.add.button(this.world.centerX - 100, 300, 'multiPlayerButton', this.startMultiPlayer,this, 2, 1, 0);
