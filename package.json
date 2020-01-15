@@ -1,12 +1,18 @@
 {
   "name": "pong",
-  "version": "0.0.0",
+  "version": "0.0.1",
+  "homepage": "http://sidneyk1.github.io/pong",
   "scripts": {
+    "build": "webpack --mode production",
     "start": "webpack --mode development && webpack-dev-server",
-    "clean": "rm -rf dist node_modules package-lock.json"
+    "clean": "rm -rf dist node_modules package-lock.json",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {},
   "devDependencies": {
+    "copy-webpack-plugin": "^5.1.1",
+    "gh-pages": "^2.2.0",
     "html-webpack-plugin": "^3.2.0",
     "webpack": "^4.40.2",
     "webpack-cli": "^3.3.9",
