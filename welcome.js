@@ -14,9 +14,9 @@ export default class Welcome {
         this.add.button(this.world.centerX - 88, 550, 'multiPlayerButton', this.startMultiPlayer,this, 2, 1, 0);
         this.add.button(this.game.world.centerX - 77, this.game.world.centerY + 240, 'control', this.showControls, this, 2, 1, 0);
 
-        this.game.add.text(this.world.centerX - 220, this.game.world.height - 670, 'Willkommen zu\n       PONG', {
+        this.game.add.text(this.world.centerX - 95, 130, 'PONG', {
             font: "64px Arial",
-            fill: "#EC0909",
+            fill: "#fff",
             algin: "center"
         });
     }

@@ -14,9 +14,9 @@ export default class Controls {
         this.add.image(10, 250, 'phone');
         const finger = this.add.image(80, 450, 'Finger');
         this.add.button(this.world.centerX - 150, 660, 'back', this.goBack, this, 2, 1, 0);
-        const text = this.game.add.text(this.world.centerX - 170, this.world.height - 730, 'Tippe oder benutze A/D\n   und die Pfeiltasten', {
+        const text = this.game.add.text(this.world.centerX - 170, this.world.height - 730, '  Spieler 1: A und S\n  Spieler 2: Pfeiltasten\n  oder Touch-Eingabe' , {
             font: "64px Arial",
-            fill: "#EC0909",
+            fill: "#ffffff",
             algin: "center"
         });
         text.scale.setTo(0.5, 0.5);
