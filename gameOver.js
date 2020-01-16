@@ -11,7 +11,7 @@ export default class GameOver {
         this.add.button(this.world.centerX - 80, 550, 'returnToHome', this.returnToHome,this, 2, 1, 0);
         this.add.button(this.world.centerX - 80, 460, 'playAgain', this.playsameAgain,this, 2, 1, 0);
         const winner = localStorage.getItem('winner');
-        this.game.add.text(80, 90, `     ${winner} \n hat gewonnen`, {
+        this.game.add.text(80, 90, `      ${winner} \n hat gewonnen`, {
             font: "48px Arial",
             fill: "#fff",
             algin: "center"

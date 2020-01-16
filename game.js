@@ -13,7 +13,11 @@ export default class PongGame {
         this.game.physics.arcade.enable(player);
         player.body.collideWorldBounds = true;
         player.body.immovable = true;
-        player.scale.setTo(0.4, 0.4);
+        if (this.difficulty === 'hard') {
+            player.scale.setTo(0.30, 0.30);
+        } else {
+            player.scale.setTo(0.35, 0.35); // normal
+        }
 
         return player;
     }
@@ -24,7 +28,7 @@ export default class PongGame {
         this.game.physics.arcade.enable(ball);
         ball.body.collideWorldBounds = true;
         ball.body.bounce.setTo(1, 1);
-        ball.scale.setTo(0.20, 0.20);
+        ball.scale.setTo(0.2, 0.2);
 
         return ball;
     }
@@ -49,7 +53,11 @@ export default class PongGame {
         this.add.image(0, 0, 'Court')
         this.multiplayer = parseInt(localStorage.getItem('pongMultiplayer'));
         this.ballLaunched = false;
-        this.ballVelocity = 400;
+        if (this.difficulty === 'hard') {
+            this.ballVelocity = 600;
+        } else {
+            this.ballVelocity = 500; // normal
+        }
 
         this.player1 = this.createPlayer(this.game.world.centerX, 0);
         this.player2 = this.createPlayer(this.game.world.centerX, this.game.world.height);

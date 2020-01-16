@@ -24,12 +24,12 @@ export default class Welcome {
   
     startSinglePlayer() {
         localStorage.setItem('pongMultiplayer', 0);
-        this.state.start('game');
+        this.state.start('chooseDifficulty');
     }
 
     startMultiPlayer() {
         localStorage.setItem('pongMultiplayer', 1);
-        this.state.start('game')
+        this.state.start('chooseDifficulty')
     }
 
     showControls() {
