@@ -50,6 +50,11 @@ export default class PongGame {
 
 
     create() {
+        // By default Phaser starts with two pointers, but we need to support four for multiplayer
+        this.game.input.addPointer();
+        this.game.input.addPointer();
+
+        this.difficulty = localStorage.getItem('difficulty');
         this.add.image(0, 0, 'Court')
         this.multiplayer = parseInt(localStorage.getItem('pongMultiplayer'));
         this.ballLaunched = false;
@@ -95,12 +100,8 @@ export default class PongGame {
     }
 
     isTouchInputActive() {
-        if (this.game.input.mousePointer.isDown) {
-            return this.game.input.mousePointer;
-        } else if (this.game.input.pointer1.isDown) {
-            return this.game.input.pointer1;
-        }
-        return false;
+        return this.game.input.mousePointer.isDown || this.game.input.pointer1.isDown
+            || this.game.input.pointer2.isDown || this.game.input.pointer3.isDown || this.game.input.pointer4.isDown;
     }
 
     movePlayerByTouch() {
