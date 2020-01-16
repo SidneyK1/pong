@@ -5,6 +5,7 @@ export default class PongGame {
         this.game.load.image('tennisball', './assets/tennisball.png');
         this.game.load.image('Court', './assets/background2.jpg');
         this.game.load.spritesheet('startButton', './assets/play-button.png');
+        this.game.load.spritesheet('specialItem', './assets/specialItem.png');
     }
 
     createPlayer(x,y) {
@@ -35,17 +36,10 @@ export default class PongGame {
 
 
     launchBall() {
-        if (this.ballLaunched) {
-            this.ball.x = this.game.world.centerX;
-            this.ball.y = this.game.world.centerY;
-            this.ball.body.velocity.setTo(0, 0);
-            this.ball_launched = false; 
-        } else {
-            this.ball.body.velocity.x = -this.ballVelocity;
-            this.ball.body.velocity.y = this.ballVelocity;
-            this.ballLaunched = true;
-            this.playButton.pendingDestroy = true;
-        }
+        this.ball.body.velocity.x = -this.ballVelocity;
+        this.ball.body.velocity.y = this.ballVelocity;
+        this.ballLaunched = true;
+        this.playButton.pendingDestroy = true;
     }
 
 
@@ -124,6 +118,20 @@ export default class PongGame {
         }
     }
 
+    addSpecialItemByChance() {
+        const number = this.game.rnd.integerInRange(0, 10000000);
+        if ((!this.specialItem || !this.specialItem.visible) && number % 7 === 0 && number % 3 === 0 && number % 13 === 0) {
+            
+            this.specialItem = this.game.add.sprite(
+                this.game.world.randomX,
+                this.game.world.randomY,
+                'specialItem'
+            );
+            this.specialItem.scale.setTo(0.06, 0.06)
+            this.game.physics.arcade.enable(this.specialItem);
+        }
+    }
+
     update() {
         if (this.ballLaunched) {
             if (this.isTouchInputActive()) {
@@ -155,6 +163,38 @@ export default class PongGame {
 
         this.player1ScoreText.text = this.scorePlayer1;
         this.player2ScoreText.text = this.scorePlayer2;
+
+        const itemsEnabled = parseInt(localStorage.getItem('itemsEnabled'));
+        if (itemsEnabled) {
+            this.addSpecialItemByChance();
+            if (this.specialItem) {
+                this.game.physics.arcade.overlap(
+                    this.ball,
+                    this.specialItem,
+                    this.handleSpecialItemOverlap.bind(this)
+                )
+            }
+        }
+    }
+
+    handleSpecialItemOverlap() {
+        const currentVelocity = this.ball.body.velocity;
+        this.ball.body.velocity.setTo(
+            currentVelocity.x > 0 ? currentVelocity.x + 200 : currentVelocity.x - 200, 
+            currentVelocity.y > 0 ? currentVelocity.y + 200 : currentVelocity.y - 200
+        );
+        this.specialItem.pendingDestroy = true;
+        this.game.time.events.add(
+            Phaser.Timer.SECOND * 2.5,
+            () => {
+                const currentVelocity = this.ball.body.velocity;
+                this.ball.body.velocity.setTo(
+                    currentVelocity.x > 0 ? currentVelocity.x - 200 : currentVelocity.x + 200, 
+                    currentVelocity.y > 0 ? currentVelocity.y - 200 : currentVelocity.y + 200
+                );
+            },
+            this
+        );
     }
 
     checkGameOver() {
