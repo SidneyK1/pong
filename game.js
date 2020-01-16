@@ -123,8 +123,8 @@ export default class PongGame {
         if ((!this.specialItem || !this.specialItem.visible) && number % 7 === 0 && number % 3 === 0 && number % 13 === 0) {
             
             this.specialItem = this.game.add.sprite(
-                this.game.world.randomX,
-                this.game.world.randomY,
+                this.game.rnd.integerInRange(42, 451), // coordinate range inside blue tennis field
+                this.game.rnd.integerInRange(45, 787),
                 'specialItem'
             );
             this.specialItem.scale.setTo(0.06, 0.06)
