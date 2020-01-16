@@ -165,7 +165,7 @@ export default class PongGame {
         this.player2ScoreText.text = this.scorePlayer2;
 
         const itemsEnabled = parseInt(localStorage.getItem('itemsEnabled'));
-        if (itemsEnabled) {
+        if (itemsEnabled && this.ballLaunched) {
             this.addSpecialItemByChance();
             if (this.specialItem) {
                 this.game.physics.arcade.overlap(
