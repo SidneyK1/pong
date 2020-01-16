@@ -58,8 +58,8 @@ export default class PongGame {
             this.ballVelocity = 500; // normal
         }
 
-        this.player1 = this.createPlayer(this.game.world.centerX, 0);
-        this.player2 = this.createPlayer(this.game.world.centerX, this.game.world.height);
+        this.player1 = this.createPlayer(this.game.world.centerX, this.game.world.height);
+        this.player2 = this.createPlayer(this.game.world.centerX, 0);
         this.ball = this.createBall(this.game.world.centerX, this.game.world.centerY);
 
         this.playButton = this.add.button(this.world.centerX - 40, this.world.centerY - 40, 'startButton', this.launchBall, this, 2, 1, 0);
@@ -74,13 +74,13 @@ export default class PongGame {
             right: this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT)
         };
 
-        this.player1ScoreText = this.game.add.text(35, 275, '0', {
+        this.player1ScoreText = this.game.add.text(35, this.game.world.height - 390, '0', {
             font: "64px Arial",
             fill: "#EC0909",
             algin: "center"
         }); 
-
-        this.player2ScoreText = this.game.add.text(35, this.game.world.height - 390, '0', {
+        
+        this.player2ScoreText = this.game.add.text(35, 275, '0', {
             font: "64px Arial",
             fill: "#EC0909",
             algin: "center"
@@ -99,7 +99,7 @@ export default class PongGame {
     }
 
     movePlayerByTouch() {
-        const touchedPlayer = !this.multiplayer || this.game.input.y < this.game.world.centerY ? this.player1 : this.player2;
+        const touchedPlayer = !this.multiplayer || this.game.input.y > this.game.world.centerY ? this.player1 : this.player2;
         if (this.game.input.x < this.game.world.centerX) {
             touchedPlayer.body.velocity.x = -500;
         } else {
@@ -147,9 +147,9 @@ export default class PongGame {
         this.game.physics.arcade.collide(this.player1, this.ball);
         this.game.physics.arcade.collide(this.player2, this.ball);
 
-        if (this.ball.body.blocked.up) {
+        if (this.ball.body.blocked.down) {
             this.scorePlayer2 += 1;
-        } else if (this.ball.body.blocked.down) {
+        } else if (this.ball.body.blocked.up) {
             this.scorePlayer1 += 1;
         }
         this.checkGameOver();
