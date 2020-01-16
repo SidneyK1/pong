@@ -66,7 +66,7 @@ export default class PongGame {
 
         this.player1Controls = {
             left: this.game.input.keyboard.addKey(Phaser.Keyboard.A),
-            right: this.game.input.keyboard.addKey(Phaser.Keyboard.D)
+            right: this.game.input.keyboard.addKey(Phaser.Keyboard.S)
         };
 
         this.player2Controls = {
