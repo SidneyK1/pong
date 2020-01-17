@@ -40,6 +40,7 @@ export default class PongGame {
         this.ball.y = this.game.world.centerY;
         this.ball.body.velocity.setTo(0, 0);
         this.ballLaunched = false;
+        
         this.game.time.events.add(
             Phaser.Timer.SECOND * 1,
             this.launchBall.bind(this)
@@ -48,6 +49,9 @@ export default class PongGame {
 
 
     launchBall() {
+        if (!this.multiplayer) {
+            this.player2.body.maxVelocity.x = 250; // reset enemy velocity in case speed up item was active
+        }
         this.ball.body.velocity.setTo(
             -this.ballVelocity,
             !this.player1HasServe ? this.ballVelocity : -this.ballVelocity
@@ -201,16 +205,22 @@ export default class PongGame {
             currentVelocity.x > 0 ? currentVelocity.x + 200 : currentVelocity.x - 200, 
             currentVelocity.y > 0 ? currentVelocity.y + 200 : currentVelocity.y - 200
         );
+        if (!this.multiplayer) {
+            this.player2.body.maxVelocity.x = 320;
+        }
         this.specialItem.pendingDestroy = true;
         this.game.time.events.add(
             Phaser.Timer.SECOND * 2.5,
             () => {
-                if (!this.ball.body.velocity.x > 500) {
+                if (!this.ball.body.velocity.x > this.ballVelocity) {
                     const currentVelocity = this.ball.body.velocity;
                     this.ball.body.velocity.setTo(
                         currentVelocity.x > 0 ? currentVelocity.x - 200 : currentVelocity.x + 200, 
                         currentVelocity.y > 0 ? currentVelocity.y - 200 : currentVelocity.y + 200
                     );
+                    if (!this.multiplayer && this.player2.body.maxVelocity.x > 250) {
+                        this.player2.body.maxVelocity.x = 250;
+                    }
                 }
             },
             this
