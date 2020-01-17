@@ -11,10 +11,21 @@ export default class GameOver {
         this.add.button(this.world.centerX - 80, 550, 'returnToHome', this.returnToHome,this, 2, 1, 0);
         this.add.button(this.world.centerX - 80, 460, 'playAgain', this.playsameAgain,this, 2, 1, 0);
         const winner = localStorage.getItem('winner');
+        const result = JSON.parse(localStorage.getItem('gameResult'));
+        result.player1
+        result.player2
         this.game.add.text(80, 90, `      ${winner} \n hat gewonnen`, {
             font: "48px Arial",
             fill: "#fff",
             algin: "center"
+        });
+        this.game.add.text(125, 255, `${result.player1} :`, {
+            font: "128px Arial",
+            fill: "#EC0909"
+        });
+        this.game.add.text(295, 255, result.player2, {
+            font: "128px Arial",
+            fill: "#EC0909",
         });
     }
 

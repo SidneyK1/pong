@@ -230,11 +230,13 @@ export default class PongGame {
     checkGameOver() {
         if (this.scorePlayer1 === 6) {
             localStorage.setItem('winner', 'Spieler 1');
+            localStorage.setItem('gameResult', `{ "player1":  ${this.scorePlayer1}, "player2": ${this.scorePlayer2}}`);
             this.game.sound.play('GameSetMatch');
             this.game.state.start('gameover');
         }
         if (this.scorePlayer2 === 6) {
             localStorage.setItem('winner', 'Spieler 2');
+            localStorage.setItem('gameResult', `{ "player1":  ${this.scorePlayer1}, "player2": ${this.scorePlayer2}}`);
             this.game.sound.play('GameSetMatch');
             this.game.state.start('gameover');
         }
