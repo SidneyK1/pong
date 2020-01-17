@@ -34,12 +34,25 @@ export default class PongGame {
         return ball;
     }
 
+    resetBall() {
+        this.ball.x = this.game.world.centerX;
+        this.ball.y = this.game.world.centerY;
+        this.ball.body.velocity.setTo(0, 0);
+        this.ballLaunched = false;
+        this.game.time.events.add(
+            Phaser.Timer.SECOND * 1,
+            this.launchBall.bind(this)
+        );
+    }
+
 
     launchBall() {
-        this.ball.body.velocity.x = -this.ballVelocity;
-        this.ball.body.velocity.y = this.ballVelocity;
+        this.ball.body.velocity.setTo(
+            -this.ballVelocity,
+            !this.player1HasServe ? this.ballVelocity : -this.ballVelocity
+        );
         this.ballLaunched = true;
-        this.playButton.pendingDestroy = true;
+        this.playButton.pendingDestroy = true;       
     }
 
 
@@ -61,6 +74,7 @@ export default class PongGame {
         this.player1 = this.createPlayer(this.game.world.centerX, this.game.world.height);
         this.player2 = this.createPlayer(this.game.world.centerX, 0);
         this.ball = this.createBall(this.game.world.centerX, this.game.world.centerY);
+        this.player1HasServe = true;
 
         this.playButton = this.add.button(this.world.centerX - 40, this.world.centerY - 40, 'startButton', this.launchBall, this, 2, 1, 0);
 
@@ -149,8 +163,13 @@ export default class PongGame {
 
         if (this.ball.body.blocked.down) {
             this.scorePlayer2 += 1;
+            this.player1HasServe = true;
+            this.resetBall();
+            
         } else if (this.ball.body.blocked.up) {
             this.scorePlayer1 += 1;
+            this.player1HasServe = false;
+            this.resetBall();
         }
         this.checkGameOver();
 
@@ -187,11 +206,13 @@ export default class PongGame {
         this.game.time.events.add(
             Phaser.Timer.SECOND * 2.5,
             () => {
-                const currentVelocity = this.ball.body.velocity;
-                this.ball.body.velocity.setTo(
-                    currentVelocity.x > 0 ? currentVelocity.x - 200 : currentVelocity.x + 200, 
-                    currentVelocity.y > 0 ? currentVelocity.y - 200 : currentVelocity.y + 200
-                );
+                if (!this.ball.body.velocity.x > 500) {
+                    const currentVelocity = this.ball.body.velocity;
+                    this.ball.body.velocity.setTo(
+                        currentVelocity.x > 0 ? currentVelocity.x - 200 : currentVelocity.x + 200, 
+                        currentVelocity.y > 0 ? currentVelocity.y - 200 : currentVelocity.y + 200
+                    );
+                }
             },
             this
         );
