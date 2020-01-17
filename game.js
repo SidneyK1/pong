@@ -5,8 +5,9 @@ export default class PongGame {
         this.game.load.image('tennisball', './assets/tennisball.png');
         this.game.load.image('Court', './assets/background2.jpg');
         this.game.load.spritesheet('startButton', './assets/play-button.png');
-        this.game.load.spritesheet('specialItem', './assets/specialItem.png');
-        this.game.load.audio('GameSetMatch', './assets/sound.mp3')
+        this.game.load.spritesheet('speedUp', './assets/specialItem.png');
+        this.game.load.audio('GameSetMatch', './assets/sound.mp3');
+        this.game.load.spritesheet('invertControls', './assets/changeDirection.png');
     }
 
     createPlayer(x,y) {
@@ -80,6 +81,7 @@ export default class PongGame {
         this.player2 = this.createPlayer(this.game.world.centerX, 0);
         this.ball = this.createBall(this.game.world.centerX, this.game.world.centerY);
         this.player1HasServe = true;
+        this.invertControls = false;
 
         this.playButton = this.add.button(this.world.centerX - 40, this.world.centerY - 40, 'startButton', this.launchBall, this, 2, 1, 0);
 
@@ -119,21 +121,39 @@ export default class PongGame {
 
     movePlayerByTouch() {
         const touchedPlayer = !this.multiplayer || this.game.input.y > this.game.world.centerY ? this.player1 : this.player2;
-        if (this.game.input.x < this.game.world.centerX) {
-            touchedPlayer.body.velocity.x = -500;
+         if(this.invertControls) { 
+            if (this.game.input.x < this.game.world.centerX) {
+                touchedPlayer.body.velocity.x = 500;
+            } else {
+                touchedPlayer.body.velocity.x = - 500;
+            }
         } else {
-            touchedPlayer.body.velocity.x = 500;
+            if (this.game.input.x < this.game.world.centerX) {
+                touchedPlayer.body.velocity.x = -500;
+            } else {
+                touchedPlayer.body.velocity.x = 500;
+            }
         }
     }
 
     movePlayerByKeyboard(player) {
         const controls = player === this.player1 ? this.player1Controls : this.player2Controls;
-        if (controls.left.isDown) {
-            player.body.velocity.x = -400;
-        } else if (controls.right.isDown) {
-            player.body.velocity.x = 400;
-        } else {
-            player.body.velocity.x = 0;
+         if (this.invertControls) {
+            if (controls.left.isDown) {
+                player.body.velocity.x = 400;
+            } else if (controls.right.isDown) {
+                player.body.velocity.x = -400;
+            } else {
+                player.body.velocity.x = 0;
+            }
+         } else {
+            if (controls.left.isDown) {
+                player.body.velocity.x = -400;
+            } else if (controls.right.isDown) {
+                player.body.velocity.x = 400;
+            } else {
+                player.body.velocity.x = 0;
+            }
         }
     }
 
@@ -144,9 +164,10 @@ export default class PongGame {
             this.specialItem = this.game.add.sprite(
                 this.game.rnd.integerInRange(42, 451), // coordinate range inside blue tennis field
                 this.game.rnd.integerInRange(45, 787),
-                'specialItem'
+                this.game.rnd.integerInRange(1, 2) % 2 === 0 ? 'speedUp' : 'invertControls'
             );
-            this.specialItem.scale.setTo(0.06, 0.06)
+            console.log(this.specialItem);
+            this.specialItem.scale.setTo(0.6, 0.6)
             this.game.physics.arcade.enable(this.specialItem);
         }
     }
@@ -209,22 +230,34 @@ export default class PongGame {
             this.player2.body.maxVelocity.x = 320;
         }
         this.specialItem.pendingDestroy = true;
-        this.game.time.events.add(
-            Phaser.Timer.SECOND * 2.5,
-            () => {
-                if (!this.ball.body.velocity.x > this.ballVelocity) {
-                    const currentVelocity = this.ball.body.velocity;
-                    this.ball.body.velocity.setTo(
-                        currentVelocity.x > 0 ? currentVelocity.x - 200 : currentVelocity.x + 200, 
-                        currentVelocity.y > 0 ? currentVelocity.y - 200 : currentVelocity.y + 200
-                    );
-                    if (!this.multiplayer && this.player2.body.maxVelocity.x > 250) {
-                        this.player2.body.maxVelocity.x = 250;
+        if (this.specialItem.key === 'speedUp') {
+            this.game.time.events.add(
+                Phaser.Timer.SECOND * 2.5,
+                () => {
+                    if (!this.ball.body.velocity.x > this.ballVelocity) {
+                        const currentVelocity = this.ball.body.velocity;
+                        this.ball.body.velocity.setTo(
+                            currentVelocity.x > 0 ? currentVelocity.x - 200 : currentVelocity.x + 200, 
+                            currentVelocity.y > 0 ? currentVelocity.y - 200 : currentVelocity.y + 200
+                        );
+                        if (!this.multiplayer && this.player2.body.maxVelocity.x > 250) {
+                            this.player2.body.maxVelocity.x = 250;
+                        }
                     }
-                }
-            },
-            this
-        );
+                },
+                this
+            );
+        } else if (this.specialItem.key === 'invertControls') {
+            this.invertControls = true;
+            this.game.time.events.add(
+                Phaser.Timer.SECOND * 2.5,
+                () => {
+                    this.invertControls = false;
+                },
+                this
+            );
+        }
+        
     }
 
     checkGameOver() {
