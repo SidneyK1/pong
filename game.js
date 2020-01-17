@@ -147,14 +147,12 @@ export default class PongGame {
     }
 
     update() {
-        if (this.ballLaunched) {
-            if (this.isTouchInputActive()) {
-                this.movePlayerByTouch();
-            } else {
-                this.movePlayerByKeyboard(this.player1);
-                if (this.multiplayer) {
-                    this.movePlayerByKeyboard(this.player2);
-                }
+        if (this.isTouchInputActive()) {
+            this.movePlayerByTouch();
+        } else {
+            this.movePlayerByKeyboard(this.player1);
+            if (this.multiplayer) {
+                this.movePlayerByKeyboard(this.player2);
             }
         }
         
