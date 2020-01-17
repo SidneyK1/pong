@@ -1,6 +1,7 @@
 # PONG
 
 This project was developed during my internship at LeanIX.
+Special Thanks to [Konstantin Tieber](https://github.com/xkons)
 
 ## Development
 
