@@ -13,7 +13,8 @@ module.exports = {
       template: 'index.html'
     }),
     new CopyWebpackPlugin([
-      {from:'assets', to:'assets'} 
+      {from:'assets', to:'assets'},
+      {from:'sw.js', to: 'sw.js'}
   ]), 
   ]
 };

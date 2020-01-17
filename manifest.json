@@ -1,0 +1,10 @@
+{
+    "name": "Pong",
+    "short_name": "Pong",
+    "description": "Sidneys Pong Spiel.",
+    "start_url": "/",
+    "background_color": "#446b32",
+    "theme_color": "#446b32",
+    "display": "standalone",
+    "icons": []
+}
