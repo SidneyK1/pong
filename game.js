@@ -6,6 +6,7 @@ export default class PongGame {
         this.game.load.image('Court', './assets/background2.jpg');
         this.game.load.spritesheet('startButton', './assets/play-button.png');
         this.game.load.spritesheet('specialItem', './assets/specialItem.png');
+        this.game.load.audio('GameSetMatch', './assets/sound.mp3')
     }
 
     createPlayer(x,y) {
@@ -219,10 +220,12 @@ export default class PongGame {
     checkGameOver() {
         if (this.scorePlayer1 === 6) {
             localStorage.setItem('winner', 'Spieler 1');
+            this.game.sound.play('GameSetMatch');
             this.game.state.start('gameover');
         }
         if (this.scorePlayer2 === 6) {
             localStorage.setItem('winner', 'Spieler 2');
+            this.game.sound.play('GameSetMatch');
             this.game.state.start('gameover');
         }
     }
